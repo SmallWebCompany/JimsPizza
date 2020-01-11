@@ -149,6 +149,17 @@ class Genesis_Script_Loader {
 			);
 		}
 
+		// Footer Widgets panel.
+		if ( isset( $visible_panels['footer-widgets'] ) ) {
+			wp_enqueue_script(
+				'genesis-footer-widgets-toggle',
+				GENESIS_JS_URL . '/build/footer-widgets-toggle.js',
+				[ 'wp-components', 'wp-compose', 'wp-data', 'wp-element', 'wp-i18n', 'wp-plugins', 'wp-polyfill' ],
+				PARENT_THEME_VERSION,
+				true
+			);
+		}
+
 		// Custom Classes panel.
 		if ( isset( $visible_panels['custom-classes'] ) ) {
 			wp_enqueue_script(
@@ -165,6 +176,7 @@ class Genesis_Script_Loader {
 		wp_set_script_translations( 'genesis-title-toggle', 'genesis', GENESIS_LANGUAGES_DIR );
 		wp_set_script_translations( 'genesis-image-toggle', 'genesis', GENESIS_LANGUAGES_DIR );
 		wp_set_script_translations( 'genesis-layout-toggle', 'genesis', GENESIS_LANGUAGES_DIR );
+		wp_set_script_translations( 'genesis-footer-widgets-toggle', 'genesis', GENESIS_LANGUAGES_DIR );
 		wp_set_script_translations( 'genesis-custom-classes', 'genesis', GENESIS_LANGUAGES_DIR );
 
 	}
@@ -364,6 +376,10 @@ class Genesis_Script_Loader {
 			$post_type      = $current_screen->post_type ?: '';
 		}
 
+		if ( ! post_type_supports( $post_type, 'custom-fields' ) ) {
+			return [];
+		}
+
 		$post_type_is_public = false;
 		$post_type_info      = get_post_type_object( $post_type );
 
@@ -409,6 +425,18 @@ class Genesis_Script_Loader {
 
 		if ( $inpost_layouts_supported && $supports_genesis_layouts ) {
 			$visible_panels['layout'] = 1;
+		}
+
+		// Footer Widgets panel.
+		$footer_widgets_toggle_enabled  = apply_filters( 'genesis_footer_widgets_toggle_enabled', true );
+		$supports_footer_widgets_toggle = post_type_supports( $post_type, 'genesis-footer-widgets-toggle' );
+
+		if (
+			current_theme_supports( 'genesis-footer-widgets' )
+			&& $footer_widgets_toggle_enabled
+			&& $supports_footer_widgets_toggle
+		) {
+			$visible_panels['footer-widgets'] = 1;
 		}
 
 		// Custom classes panel.

@@ -4,7 +4,6 @@
  *
  * This file adds the landing page template to the Genesis Sample Theme.
  *
- *
  * Template Name: Landing
  *
  * @package Genesis Sample
@@ -52,45 +51,10 @@ remove_action( 'genesis_header', 'genesis_header_markup_close', 15 );
 // Removes navigation.
 remove_theme_support( 'genesis-menus' );
 
-// Removes footer widgets.
-remove_action( 'genesis_before_footer', 'genesis_footer_widget_areas' );
-
 // Removes site footer elements.
 remove_action( 'genesis_footer', 'genesis_footer_markup_open', 5 );
 remove_action( 'genesis_footer', 'genesis_do_footer' );
 remove_action( 'genesis_footer', 'genesis_footer_markup_close', 15 );
-
-//Now that Genesis general stuff is out of the way, time to add my own code:
-
-add_action('genesis_header', 'custom_header');
-
-function custom_header(){
-	?>
-	<header>
-		<section>
-			Hello world from the header section!
-		</section>
-	</header>
-
-	<?php
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Runs the Genesis loop.
 genesis();
